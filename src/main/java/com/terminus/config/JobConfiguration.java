@@ -16,6 +16,10 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * 入门案例
+ * by xiaomei at 2021.06.21
+ */
 @Configuration
 @EnableBatchProcessing
 public class JobConfiguration {
