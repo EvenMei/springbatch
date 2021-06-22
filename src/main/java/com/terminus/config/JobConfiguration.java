@@ -20,8 +20,8 @@ import java.time.format.DateTimeFormatter;
  * 入门案例
  * by xiaomei at 2021.06.21
  */
-@Configuration
-@EnableBatchProcessing
+/*@Configuration
+@EnableBatchProcessing*/
 public class JobConfiguration {
     // 注入创建任务对象的对象
     @Autowired
@@ -34,14 +34,14 @@ public class JobConfiguration {
 
     @Bean
     public Job myJob(){
-        return jobBuilderFactory.get("get taskName")
+        return jobBuilderFactory.get("get taskName2")
                 .start(myStep1())
                 .build();
     }
 
     @Bean
     public Step myStep1(){
-        return stepBuilderFactory.get("step1 name").tasklet(new Tasklet() {
+        return stepBuilderFactory.get("step1 name2").tasklet(new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
                 System.out.println("myStep1 printTime ====> "+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
