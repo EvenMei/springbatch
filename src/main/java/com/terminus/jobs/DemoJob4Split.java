@@ -2,14 +2,12 @@ package com.terminus.jobs;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 /**
@@ -17,8 +15,8 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
  * this demo used to learn about <hint>springbatch</hint> <link>split</link>
  *by author <author>meiyukai</author> at <date>2021.06.21</date>
  */
-@Configuration
-@EnableBatchProcessing
+/*@Configuration
+@EnableBatchProcessing*/
 public class DemoJob4Split {
 
     @Bean Step splitStep1(StepBuilderFactory stepBuilderFactory){
