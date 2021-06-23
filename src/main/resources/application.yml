@@ -10,7 +10,6 @@ spring:
 #    job:
 #      names: parentJob-01
 #      names: myjob-02
-
 ###mybatis 配置项
 mybatis:
   mapper-locations: mappers/*.xml
