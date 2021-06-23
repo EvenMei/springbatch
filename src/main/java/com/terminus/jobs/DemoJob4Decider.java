@@ -77,14 +77,17 @@ public class DemoJob4Decider {
 
 //    @Bean
     public Job deciderJob(JobBuilderFactory jobBuilderFactory,JobExecutionDecider jobExecutionDecider, Step step1, Step step2,Step step3) {
-        return jobBuilderFactory.get("jobExecutionDecider-35")
+        return jobBuilderFactory.get("jobExecutionDecider - demo 05")
                 .start(step1)
 //                .next(jobExecutionDecider).on("odd").to(step3)
                 .next(jobExecutionDecider).on("even").to(step2)
                 .next(jobExecutionDecider).on("odd").to(step3)
+                .from(step3).on("*").to(jobExecutionDecider)
 //                .from(step3).on("*").to(step2)
                 .end().build();
 
+        /*return jobBuilderFactory.get("jobExecutionDemo 02")
+                .start(step1)
         /*return jobBuilderFactory.get("jobExecutionDecider-demo-4")
                 .start(step1)
                 .next(jobExecutionDecider)
@@ -100,7 +103,7 @@ public class DemoJob4Decider {
                 .next(jobExecutionDecider)
                 .from(jobExecutionDecider).on("even").to(step2)
                 .from(jobExecutionDecider).on("odd").to(step3)
-//                .from(step3).on("*").to(jobExecutionDecider)
+                .from(step3).on("*").to(jobExecutionDecider)
                 .from(step2).on("*").to(jobExecutionDecider)
                 .end().build();*/
     }

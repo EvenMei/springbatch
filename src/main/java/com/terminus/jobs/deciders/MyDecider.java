@@ -12,14 +12,10 @@ public class MyDecider implements JobExecutionDecider {
     public FlowExecutionStatus decide(JobExecution jobExecution, StepExecution stepExecution) {
         count++;
         if((count & 0x01) == 0){
-            if(log.isDebugEnabled()){
-                log.warn("MyDecider   even  jobExecution = {}" , jobExecution.toString() );
-            }
+            System.out.println("decide return even");
             return new FlowExecutionStatus("even");
         }else{
-            if(log.isDebugEnabled()){
-                log.warn("MyDecider odd job  stepExecution = {}" , stepExecution);
-            }
+            System.out.println("decide return odd");
             return new FlowExecutionStatus("odd");
         }
     }
