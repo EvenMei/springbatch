@@ -6,10 +6,13 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.FlowBuilder;
+import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.job.flow.JobExecutionDecider;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 @Configuration
 @EnableBatchProcessing
@@ -45,20 +48,60 @@ public class DemoJob4Decider {
     }
 
     @Bean
-    public Job deciderJob(JobBuilderFactory jobBuilderFactory,JobExecutionDecider jobExecutionDecider, Step step1, Step step2,Step step3) {
-        return jobBuilderFactory.get("jobExecutionDecider demo - 11")
+    public Flow stepFlow1(Step step1, Step step2 , JobExecutionDecider jobExecutionDecider){
+        return new FlowBuilder<Flow>("stepFlow1")
                 .start(step1)
-                /*.next(jobExecutionDecider).on("odd").to(step3)*/
+                .next(jobExecutionDecider).on("even").to(step2)
+                .build();
+    }
+
+    @Bean
+    public Flow stepFlow2(Step step1, Step step3, JobExecutionDecider jobExecutionDecider){
+        return new FlowBuilder<Flow>("stepFlow2")
+                .start(step1)
+                .from(jobExecutionDecider).on("odd").to(step3)
+                .build();
+    }
+
+
+
+
+
+    @Bean
+    public Job myJob(JobBuilderFactory jobBuilderFactory, Flow stepFlow1 , Flow stepFlow2){
+        return jobBuilderFactory.get("myJob-13")
+                .start(stepFlow1).split(new SimpleAsyncTaskExecutor()).add(stepFlow2)
+                .end().build();
+    }
+
+
+//    @Bean
+    public Job deciderJob(JobBuilderFactory jobBuilderFactory,JobExecutionDecider jobExecutionDecider, Step step1, Step step2,Step step3) {
+        return jobBuilderFactory.get("jobExecutionDecider-35")
+                .start(step1)
+//                .next(jobExecutionDecider).on("odd").to(step3)
                 .next(jobExecutionDecider).on("even").to(step2)
                 .next(jobExecutionDecider).on("odd").to(step3)
-                .from(step3).on("*").to(jobExecutionDecider)/*.on("even").to(step2)*/
+//                .from(step3).on("*").to(step2)
                 .end().build();
 
-       /* return jobBuilderFactory.get("jobExecutionDecider-1").start(step1)
+        /*return jobBuilderFactory.get("jobExecutionDecider-demo-4")
+                .start(step1)
                 .next(jobExecutionDecider)
                 .from(jobExecutionDecider).on("even").to(step2)
                 .from(jobExecutionDecider).on("odd").to(step3)
-                .from(step3).on("*").to(jobExecutionDecider).end().build();*/
+                .from(step3).on("*").to(jobExecutionDecider)
+//                .from(step2).on("*").to(jobExecutionDecider)
+                .end().build();*/
 
+
+        /*return jobBuilderFactory.get("JobDecider -demo  16")
+                .start(step1)
+                .next(jobExecutionDecider)
+                .from(jobExecutionDecider).on("even").to(step2)
+                .from(jobExecutionDecider).on("odd").to(step3)
+//                .from(step3).on("*").to(jobExecutionDecider)
+                .from(step2).on("*").to(jobExecutionDecider)
+                .end().build();*/
     }
 }
