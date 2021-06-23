@@ -4,6 +4,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
@@ -30,19 +31,26 @@ public class ChunkListenerDemo {
     }
 
     @Bean
-    public Step step1 (StepBuilderFactory stepBuilderFactory, ItemReader read, ItemWriter write){
+    public ItemProcessor<String,String>processor(){
+        return new MyProcessor();
+    }
+
+
+    @Bean
+    public Step step1 (StepBuilderFactory stepBuilderFactory, ItemReader read, ItemWriter write,ItemProcessor processor){
         return stepBuilderFactory.get("step1")
                 .<String,String>chunk(2)  // 每read  完2个数据进行一次输出
                 .faultTolerant() // 容错处理
-                .reader(read)
                 .listener(new MyChunkListener())
+                .reader(read)
+                .processor(processor)
                 .writer(write)
                 .build();
     }
 
     @Bean
     public Job myJob2(JobBuilderFactory jobBuilderFactory, Step step1){
-        return jobBuilderFactory.get("myJob2-03")
+        return jobBuilderFactory.get("myJob2-04")
                 .start(step1)
                 .listener(new MyJobListener())
                 .build();
