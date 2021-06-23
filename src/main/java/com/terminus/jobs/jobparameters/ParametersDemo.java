@@ -24,15 +24,16 @@ import java.util.Map;
 public class ParametersDemo implements JobExecutionListener {
 
     private Map<String, JobParameter> parameters;
+    private ItemReader<String> reader;
 
 //    @Bean
-    public ItemReader<String> reader(){
+    public ItemReader<String> getReader( Map<String,JobParameter> parameters){
 //        return new MyReader();
         return new ListItemReader<String>(Arrays.asList(
                 "from xiaomei",
                 "from zhangsan",
-                "from lisi"
-//                parameters.get("name").toString()
+                "from lisi",
+                parameters.get("name").toString()
         ));
     }
 
@@ -50,7 +51,7 @@ public class ParametersDemo implements JobExecutionListener {
         return stepBuilderFactory.get("step1")
                 .<String,String>chunk(2)
                 .faultTolerant()
-                .reader(reader())
+                .reader(reader)
                 .processor(processor())
                 .writer(writer())
                 .build();
@@ -66,7 +67,7 @@ public class ParametersDemo implements JobExecutionListener {
 
     @Bean
     public Job myJobParameter(JobBuilderFactory jobBuilderFactory,Step step1,Step step2){
-        return jobBuilderFactory.get("myJobParameter-15")
+        return jobBuilderFactory.get("myJobParameter-16")
                 .start(step1)
                 .listener(this)
                 .build();
@@ -76,6 +77,7 @@ public class ParametersDemo implements JobExecutionListener {
     public void beforeJob(JobExecution jobExecution) {
         System.out.println("before job ======");
         parameters = jobExecution.getJobParameters().getParameters();
+        reader =getReader(parameters);
     }
 
     @Override
