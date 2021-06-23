@@ -16,4 +16,5 @@ mybatis:
   type-aliases-package: com.terminus.pojo
 
 
-
+test:
+  date: 23:15
