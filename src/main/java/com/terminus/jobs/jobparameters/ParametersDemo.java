@@ -5,9 +5,12 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.annotation.AfterChunk;
+import org.springframework.batch.core.annotation.BeforeChunk;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -17,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -24,36 +28,36 @@ import java.util.Map;
 public class ParametersDemo implements JobExecutionListener {
 
     private Map<String, JobParameter> parameters;
-    private ItemReader<String> reader;
 
 //    @Bean
-    public ItemReader<String> getReader( Map<String,JobParameter> parameters){
+    public ItemReader<String> getReader(){
 //        return new MyReader();
         return new ListItemReader<String>(Arrays.asList(
                 "from xiaomei",
                 "from zhangsan",
-                "from lisi",
-                parameters.get("name").toString()
+                "from lisi"
+//                parameters.get("name").toString()
         ));
     }
 
-//    @Bean
+    @Bean
     public  ItemProcessor<String,String> processor(){
         return new MyProcessor();
     }
-//    @Bean
-    public ItemWriter writer(){
-        return new MyWriter();
-    }
 
     @Bean
-    public Step step1(StepBuilderFactory stepBuilderFactory ){
+    public ItemWriter writer(){ return new MyWriter(); }
+
+
+
+    @Bean
+    public Step step1(StepBuilderFactory stepBuilderFactory,ItemWriter  writer, ItemProcessor<String,String>processor){
         return stepBuilderFactory.get("step1")
                 .<String,String>chunk(2)
                 .faultTolerant()
-                .reader(reader)
-                .processor(processor())
-                .writer(writer())
+                .reader(getReader())
+                .processor(processor)
+                .writer(writer)
                 .build();
     }
 
@@ -62,12 +66,13 @@ public class ParametersDemo implements JobExecutionListener {
                 .tasklet((stepContribution , chunkContext) -> {
                     System.out.println("value = " + parameters.get("name"));
                     return RepeatStatus.FINISHED;
-                }).build();
+                })
+                .build();
     }
 
     @Bean
     public Job myJobParameter(JobBuilderFactory jobBuilderFactory,Step step1,Step step2){
-        return jobBuilderFactory.get("myJobParameter-16")
+        return jobBuilderFactory.get("myJobParameter - 08")
                 .start(step1)
                 .listener(this)
                 .build();
@@ -76,14 +81,14 @@ public class ParametersDemo implements JobExecutionListener {
     @Override
     public void beforeJob(JobExecution jobExecution) {
         System.out.println("before job ======");
-        parameters = jobExecution.getJobParameters().getParameters();
-        reader =getReader(parameters);
+        this.parameters = jobExecution.getJobParameters().getParameters();
+        System.out.println("name = " + parameters.get("name") );
     }
 
     @Override
     public void afterJob(JobExecution jobExecution) {
         System.out.println("after job ======");
-        parameters = jobExecution.getJobParameters().getParameters();
+//        parameters = jobExecution.getJobParameters().getParameters();
     }
 
 
