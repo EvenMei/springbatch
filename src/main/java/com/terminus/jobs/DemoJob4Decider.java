@@ -3,16 +3,14 @@ package com.terminus.jobs;
 import com.terminus.jobs.deciders.MyDecider;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.flow.JobExecutionDecider;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
-@EnableBatchProcessing
+/*@Configuration
+@EnableBatchProcessing*/
 public class DemoJob4Decider {
 
     @Bean
@@ -46,7 +44,7 @@ public class DemoJob4Decider {
 
     @Bean
     public Job deciderJob(JobBuilderFactory jobBuilderFactory,JobExecutionDecider jobExecutionDecider, Step step1, Step step2,Step step3) {
-        return jobBuilderFactory.get("jobExecutionDecider - demo 03")
+        return jobBuilderFactory.get("jobExecutionDecider - demo 05")
                 .start(step1)
                 /*.next(jobExecutionDecider).on("odd").to(step3)*/
                 .next(jobExecutionDecider).on("even").to(step2)
@@ -62,6 +60,6 @@ public class DemoJob4Decider {
                 .from(step3).on("*").to(jobExecutionDecider)
                 .from(step2).on("*").to(jobExecutionDecider)
                 .end().build();*/
-
     }
+
 }
