@@ -19,8 +19,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 import java.util.Map;
 
-@Configuration
-@EnableBatchProcessing
+/*@Configuration
+@EnableBatchProcessing*/
 public class ParametersDemo implements JobExecutionListener {
 
     private Map<String, JobParameter> parameters;
