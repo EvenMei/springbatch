@@ -1,5 +1,6 @@
 package com.terminus.jobs.itemreaders;
 
+import com.terminus.pojo.Student;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -8,17 +9,34 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcPagingItemReader;
+import org.springframework.batch.item.database.Order;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.RowMapper;
+
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Configuration
 @EnableBatchProcessing
 public class ItemReaderFromDB {
 
     @Bean
-    @StepScope
-    public ItemReader reader(){
-        return new DbReader();
+    @StepScope  //bean 的生命周期和ItemReader 相同
+    public ItemReader reader(DataSource datasource){
+        JdbcPagingItemReader<Student> reader = new JdbcPagingItemReader<>();
+        reader.setDataSource(datasource);
+//        reader.setFetchSize(0);
+        reader.setRowMapper(getRowMapperFromResultSet());
+        reader.setQueryProvider(getProvider());
+        return  reader;
     }
 
     @Bean
@@ -29,7 +47,7 @@ public class ItemReaderFromDB {
     @Bean
     public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader reader, ItemWriter writer){
         return stepBuilderFactory.get("step1")
-                .chunk(2)
+                .chunk(6)
                 .reader(reader)
                 .writer(writer)
                 .build();
@@ -37,10 +55,34 @@ public class ItemReaderFromDB {
 
     @Bean
     public Job job1(JobBuilderFactory jobBuilderFactory,Step step1){
-        return jobBuilderFactory.get("itemReaderFromDB demo - 01")
+        return jobBuilderFactory.get("itemReaderFromDB demo - "+ UUID.randomUUID())
                 .start(step1)
                 .build();
     }
 
+
+    public RowMapper<Student> getRowMapperFromResultSet(){
+        return (resultSet, i) ->{
+            Student student = new Student();
+            student.setId(resultSet.getInt("id"));
+            student.setAddress(resultSet.getString("address"));
+            student.setAge(resultSet.getInt("age"));
+            student.setName(resultSet.getString("name"));
+            return student;
+        };
+    }
+
+    public PagingQueryProvider getProvider(){
+        //指定sql语句
+        MySqlPagingQueryProvider provider = new MySqlPagingQueryProvider();
+        provider.setSelectClause("select id,address,age,name");
+        provider.setFromClause("from student");
+        //设置排序
+        Map<String, Order> sortedMap = new HashMap<>(1);
+        sortedMap.put("age",Order.DESCENDING);
+        provider.setSortKeys(sortedMap);
+        provider.setWhereClause("where age > 30");
+        return provider;
+    }
 
 }
