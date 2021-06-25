@@ -7,4 +7,13 @@
     <select id="findList" resultType="com.terminus.pojo.Student">
         select * from student
     </select>
+
+    <insert id="addStudent" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+        insert into student values(null,#{name},#{age},#{address});
+    </insert>
+
+    <insert id="addStudent2" >
+        insert into student values(null,#{name},#{age},#{address});
+    </insert>
+
 </mapper>

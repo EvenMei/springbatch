@@ -3,7 +3,6 @@ package com.terminus.jobs.itemreaders;
 import com.terminus.pojo.Student;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -14,7 +13,6 @@ import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.PagingQueryProvider;
 import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
@@ -22,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Configuration
-@EnableBatchProcessing
+/*@Configuration
+@EnableBatchProcessing*/
 public class ItemReaderFromDB {
 
     @Bean

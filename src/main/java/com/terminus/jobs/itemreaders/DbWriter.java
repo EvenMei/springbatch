@@ -12,5 +12,17 @@ public class DbWriter implements ItemWriter<Student> {
         for (Student student : list){
             System.out.println("【writer】 ---->  " + student);
         }
+        /*BufferedWriter fw = new BufferedWriter(new FileWriter("/Users/meiyukai/Desktop/test.txt",true));
+        for(Student student: list){
+            StringBuffer sb = new StringBuffer();
+            sb.append(student.getId()).append(",")
+                    .append(student.getAge()).append(",")
+                    .append(student.getName()).append(",")
+                    .append(student.getAddress());
+
+            fw.write(sb.toString());
+            fw.newLine();
+        }
+        fw.close();*/
     }
 }

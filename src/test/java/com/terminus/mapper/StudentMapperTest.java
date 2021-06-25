@@ -21,5 +21,20 @@ public class StudentMapperTest {
         List<Student> studentList = studentMapper.findList();
         System.out.println("studentList = " + studentList);
     }
+
+    @Test
+    public void addStudent(){
+        Student student  = new Student();
+        student.setAge(22);
+        student.setName("mmmmm_mmmmm");
+        student.setAddress("yuewanglu");
+        int affectCount = studentMapper.addStudent(student);
+       /* Map<String,Object> studentMap = new HashMap<>();
+        studentMap.put("name","zhangshandegea");
+        studentMap.put("age",99);
+        studentMap.put("address","nanjing road");
+        int affectCount = studentMapper.addStudent2(studentMap);*/
+        System.out.println("affectCount = " + affectCount);
+    }
     
 }

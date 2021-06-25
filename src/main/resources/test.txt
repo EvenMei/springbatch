@@ -1,0 +1,10 @@
+1,25,ava,nanjing
+2,999,xiaomei,nanjing
+3,33,terminus,hangzhou
+4,22,zhangxiaomeng,hangzhou
+5,22,libai,tangchao
+6,77,dufu,songchao
+7,99,guajie,america
+8,87,duizhang,north america
+9,32,juren,middle america
+11,4,xiaopai,computer center
