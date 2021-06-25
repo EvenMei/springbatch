@@ -27,6 +27,11 @@ import java.util.UUID;
 public class ItemReaderFromDB {
 
     @Bean
+    public  ItemReader<Student> dbReader(){
+        return new DbReader();
+    };
+
+    @Bean
     @StepScope  //bean 的生命周期和ItemReader 相同
     public ItemReader reader(DataSource datasource){
         JdbcPagingItemReader<Student> reader = new JdbcPagingItemReader<>();
@@ -43,10 +48,10 @@ public class ItemReaderFromDB {
     }
 
     @Bean
-    public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader reader, ItemWriter writer){
+    public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader dbReader, ItemWriter writer){
         return stepBuilderFactory.get("step1")
-                .chunk(6)
-                .reader(reader)
+                .chunk(5)
+                .reader(dbReader)
                 .writer(writer)
                 .build();
     }
