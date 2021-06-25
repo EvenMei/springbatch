@@ -66,6 +66,20 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <!--解析 xml 文件-->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+            <version>5.1.8.RELEASE</version>
+        </dependency>
+        <!--解析 xml 文件-->
+
     </dependencies>
 
     <build>

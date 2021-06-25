@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<students>
+    <student>
+        <id>1</id>
+        <age>13</age>
+        <name>qiqing</name>
+        <address>nanjingzhonshanlu</address>
+    </student>
+    <student>
+        <id>2</id>
+        <age>23</age>
+        <name>xiangyou</name>
+        <address>honkong</address>
+    </student>
+    <student>
+        <id>3</id>
+        <age>33</age>
+        <name>xiangtai</name>
+        <address>shanghai</address>
+    </student>
+</students>
