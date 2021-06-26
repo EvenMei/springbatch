@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -36,5 +37,21 @@ public class StudentMapperTest {
         int affectCount = studentMapper.addStudent2(studentMap);*/
         System.out.println("affectCount = " + affectCount);
     }
-    
+
+
+    @Test
+    public void addList(){
+        List<Student> studentList  = new ArrayList<>();
+        for(int i = 0; i< 5; i ++){
+            Student student = new Student();
+            student.setAge(i+1);
+            student.setName("student"+i);
+            student.setAddress("address"+i);
+            studentList.add(student);
+        }
+        int affectCounts = studentMapper.addList(studentList);
+        System.out.println("affected counts = " + affectCounts);
+    }
+
+
 }

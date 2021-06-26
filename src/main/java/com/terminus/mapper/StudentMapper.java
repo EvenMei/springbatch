@@ -15,4 +15,6 @@ public interface StudentMapper {
 
     int addStudent2(Map<String,Object> studentMap);
 
+    int addList(List<Student> studentList );
+
 }
