@@ -11,9 +11,7 @@ import org.springframework.core.io.Resource;
 
 import java.util.Objects;
 
-//@Configuration
 public class RestartReader implements ItemStreamReader<Student> {
-
 
     private Long curLine = 0L;
     private boolean restart = false;
