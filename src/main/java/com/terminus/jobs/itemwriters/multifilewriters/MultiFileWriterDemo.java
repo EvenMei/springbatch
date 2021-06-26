@@ -29,8 +29,8 @@ import java.util.*;
  * 运行成功后写入到了 /[projectPath]/target/write1.txt    /[projectPath]/target/write2.xml
  */
 
-@Configuration
-@EnableBatchProcessing
+/*@Configuration
+@EnableBatchProcessing*/
 public class MultiFileWriterDemo {
 
     @Value("classpath:write1.txt")
