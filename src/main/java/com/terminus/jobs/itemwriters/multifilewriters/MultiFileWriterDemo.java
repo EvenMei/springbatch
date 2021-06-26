@@ -4,6 +4,7 @@ import com.terminus.jobs.itemwriters.MyReader;
 import com.terminus.pojo.Student;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemReader;
@@ -15,6 +16,7 @@ import org.springframework.batch.item.xml.StaxEventItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.classify.Classifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.xstream.XStreamMarshaller;
@@ -27,8 +29,8 @@ import java.util.*;
  * 运行成功后写入到了 /[projectPath]/target/write1.txt    /[projectPath]/target/write2.xml
  */
 
-/*@Configuration
-@EnableBatchProcessing*/
+@Configuration
+@EnableBatchProcessing
 public class MultiFileWriterDemo {
 
     @Value("classpath:write1.txt")
@@ -91,8 +93,8 @@ public class MultiFileWriterDemo {
                 .chunk(2)
                 .reader(reader)
                 .writer(classifierWriter)
-                .stream(xmlWriter)
-                .stream(txtWriter)
+                .stream(xmlWriter)   //由于ClassfierCompositeItemWriter 直接实现ItermWriter接口没有实现ItemStream 接口
+                .stream(txtWriter)   //因此需要调用stream()
                 .build();
     }
 
