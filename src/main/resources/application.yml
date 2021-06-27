@@ -7,6 +7,11 @@ spring:
     schema: classpath:/org/springframework/batch/core/schema-mysql.sql
   batch:
     initialize-schema: always
+    job:
+      enabled: false
+  mvc:
+    view:
+      suffix: .html
 #    job:
 #      names: parentJob-01
 #      names: myjob-02
@@ -14,3 +19,10 @@ spring:
 mybatis:
   mapper-locations: mappers/*.xml
   type-aliases-package: com.terminus.pojo
+
+
+server:
+  servlet:
+    context-path: /
+  port: 8888
+
