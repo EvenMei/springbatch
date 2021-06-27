@@ -1,7 +1,8 @@
-package com.terminus.jobs.exceptionhandle.retryandskip;
+package com.terminus.jobs.exceptionhandle.retryandskipandlistener;
 
 import com.terminus.pojo.Student;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.SkipListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 @Configuration
 @EnableBatchProcessing
-public class RetryAndSkipStepDemo {
+public class RetryAndSkipAndListenerStepDemo {
 
    @Bean
    public ItemReader reader(DataSource dataSource){
@@ -34,8 +35,13 @@ public class RetryAndSkipStepDemo {
        return new RetryWriter();
    }
 
+   @Bean
+   public SkipListener<Student,Student> skipListener(){
+       return new MySkipListener();
+   }
+
     @Bean
-    public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader reader, ItemProcessor processor,ItemWriter writer){
+    public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader reader, ItemProcessor processor,ItemWriter writer, SkipListener<Student,Student> skipListener){
         return stepBuilderFactory.get("step1")
                 .<Student, Student>chunk(2)
                 .reader(reader)
@@ -46,6 +52,7 @@ public class RetryAndSkipStepDemo {
                 .retryLimit(5)// reader and writer and processor 中的失败次数总和 不超过5
                 .skip(RuntimeException.class)
                 .skipLimit(5)
+                .listener(skipListener)
                 .build();
     }
 
