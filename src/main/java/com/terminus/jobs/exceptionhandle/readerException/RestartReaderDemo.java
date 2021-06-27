@@ -1,4 +1,4 @@
-package com.terminus.jobs.itemreaders.exceptionhandle;
+package com.terminus.jobs.exceptionhandle.readerException;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

@@ -1,4 +1,4 @@
-package com.terminus.jobs.itemreaders.exceptionhandle;
+package com.terminus.jobs.exceptionhandle.readerException;
 
 import com.terminus.pojo.Student;
 import org.springframework.batch.item.ItemWriter;
