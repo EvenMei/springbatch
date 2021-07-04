@@ -14,22 +14,21 @@ public class DbReader extends AbstractPagingItemReader<Student> {
     @Autowired
     private StudentMapper studentMapper;
 
-
-    /*@Override
-    protected Student doRead() throws Exception {
-
-    }*/
+    private Integer page = 0;
+    private Integer pageSize = 100;
 
     @Override
     protected void doReadPage() {
-        setPageSize(200);  // pageSize 的大小必须大于数据库中查询的数据量，否则无限循环查询
+        setPageSize(pageSize);  // pageSize 的大小必须大于数据库中查询的数据量，否则无限循环查询
         if(results == null){
             results = new CopyOnWriteArrayList<>();
         }else{
             results.clear();
         }
-        List<Student> studentList = studentMapper.findList();
+        //动态的获取分页信息，一页一页的返回 limit a,b
+        List<Student> studentList = studentMapper.findListPage(page*pageSize, pageSize);
         results.addAll(studentList);
+        page++;
     }
 
     @Override

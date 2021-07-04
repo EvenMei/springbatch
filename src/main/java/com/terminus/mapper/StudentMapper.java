@@ -11,6 +11,8 @@ public interface StudentMapper {
 
     List<Student> findList();
 
+    List<Student> findListPage(Integer start, Integer size);
+
     int addStudent(Student student);
 
     int addStudent2(Map<String,Object> studentMap);

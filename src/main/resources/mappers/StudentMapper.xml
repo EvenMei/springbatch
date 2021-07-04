@@ -8,6 +8,10 @@
         select * from student
     </select>
 
+    <select id="findListPage" resultType="com.terminus.pojo.Student">
+        select * from student limit #{start} , #{size}
+    </select>
+
     <insert id="addStudent" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
         insert into student values(null,#{name},#{age},#{address})
     </insert>

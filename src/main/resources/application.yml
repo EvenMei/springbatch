@@ -7,8 +7,8 @@ spring:
     schema: classpath:/org/springframework/batch/core/schema-mysql.sql
   batch:
     initialize-schema: always
-    job:
-      enabled: false
+#    job:
+#      enabled: false
   mvc:
     view:
       suffix: .html

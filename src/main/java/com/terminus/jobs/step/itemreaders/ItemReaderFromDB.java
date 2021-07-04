@@ -3,9 +3,9 @@ package com.terminus.jobs.step.itemreaders;
 import com.terminus.pojo.Student;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
@@ -13,6 +13,7 @@ import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.PagingQueryProvider;
 import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
@@ -20,8 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/*@Configuration
-@EnableBatchProcessing*/
+@Configuration
+@EnableBatchProcessing
 public class ItemReaderFromDB {
 
     @Bean
@@ -29,12 +30,11 @@ public class ItemReaderFromDB {
         return new DbReader();
     };
 
-    @Bean
-    @StepScope  //bean 的生命周期和ItemReader 相同
+//    @Bean
+//    @StepScope  //bean 的生命周期和ItemReader 相同
     public ItemReader reader(DataSource datasource){
         JdbcPagingItemReader<Student> reader = new JdbcPagingItemReader<>();
         reader.setDataSource(datasource);
-//        reader.setFetchSize(0);
         reader.setRowMapper(getRowMapperFromResultSet());
         reader.setQueryProvider(getProvider());
         return  reader;
@@ -46,9 +46,9 @@ public class ItemReaderFromDB {
     }
 
     @Bean
-    public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader dbReader, ItemWriter writer){
+    public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader dbReader, ItemReader reader, ItemWriter writer){
         return stepBuilderFactory.get("step1")
-                .chunk(5)
+                .chunk(2)
                 .reader(dbReader)
                 .writer(writer)
                 .build();
@@ -80,9 +80,9 @@ public class ItemReaderFromDB {
         provider.setFromClause("from student");
         //设置排序
         Map<String, Order> sortedMap = new HashMap<>(1);
-        sortedMap.put("age",Order.DESCENDING);
+        sortedMap.put("id", Order.ASCENDING);
         provider.setSortKeys(sortedMap);
-        provider.setWhereClause("where age > 30");
+//        provider.setWhereClause("where age > 30");
         return provider;
     }
 
